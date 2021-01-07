@@ -5,6 +5,9 @@ Usage ./computorv1.py <expression>
 Expression example:
 8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0
 
+
+
+
 Output example:
 
 Equation: 1.0 + 4.0X = 0.0
