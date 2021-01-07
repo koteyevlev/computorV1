@@ -1,7 +1,7 @@
 # computorV1
 Projects of Ecolo 42(school 21) - solving polynomials of 2 degree 
 
-Usage ./computorv1.py <expression>
+Usage ./computorv1.py "<expression>"
   
 ## Expression example:
 8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0
