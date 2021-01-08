@@ -6,13 +6,14 @@
 #                                                     +:+ +:+         +:+      #
 #    By: skrystin <skrystin@student.21-school.ru>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/04/20 15:46:41 by jaguillo          #+#    #+#              #
-#    Updated: 2015/04/20 20:03:30 by jaguillo         ###   ########.fr        #
+#    Created: 2020/01/01 15:46:41 by skrystin          #+#    #+#              #
+#    Updated: 2020/04/01 20:03:30 by skrystin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 from sys import argv
 from re import compile
+
 
 """
 Computorv1
@@ -20,13 +21,14 @@ Computorv1
 ./computorv1.py <expression>
 
 Expression example:
-8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0
-5 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 0
+8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^4 = 3 * X^0
+5 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = - 5.6 * X^3
 5 + 4 * X + X^2= X^2
 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0
 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
 5 * X^0 + 4 * X^1 = 4 * X^0
 1 * X^0 + 4 * X^1 = 0
+5 * X^0 = 5 * X^0
 
 """
 
@@ -63,12 +65,12 @@ class Polynom():
 		if self.x and self.power == 0:
 			self.x = False
 
-	def getNum(self):
+	def get_num(self):
 		if self.sign == "-":
 			return -self.num
 		return self.num
 
-	def toString(self):
+	def to_string(self):
 		s = ""
 		if self.sign != None:
 			s += self.sign
@@ -138,7 +140,7 @@ class Computer():
 			self.left.append(Polynom(None))
 		if len(self.right) == 0:
 			self.right.append(Polynom(None))
-		print("Equation: \033[36m" + self.toString() + "\033[39m")
+		print("Equation: \033[36m" + self.to_string() + "\033[39m")
 		return True
 
 	def reduce(self):
@@ -158,7 +160,7 @@ class Computer():
 		self.right = [Polynom(None)]
 		if len(self.left) == 0:
 			self.left.append(Polynom(None))
-		print("Reduced form: \033[36m" + self.toString() + "\033[39m")
+		print("Reduced form: \033[35m" + self.to_string() + "\033[39m")
 		return True
 
 	def resolve(self):
@@ -166,74 +168,73 @@ class Computer():
 		for p in self.left:
 			if p.power > degree:
 				degree = p.power
-		print("Polynomial degree: \033[32m%d\033[39m" % degree)
+		print("Degree of Equation: \033[36m%d\033[39m" % degree)
 		if degree == 0:
-			a = self.left[0].getNum()
+			a = self.left[0].get_num()
 			if a == 0:
-				print("\033[32mEvery real are solution\033[39m")
+				print("\033[35mAll the real numbers are solution\033[39m")
 			else:
-				print("\033[31mNo solution\033[39m")
+				print("\033[35mNo solutions\033[39m")
 			return False
 		elif degree == 1:
 			if len(self.left) > 1:
-				b = self.left[0].getNum()
-				a = self.left[1].getNum()
+				b = self.left[0].get_num()
+				a = self.left[1].get_num()
 			else:
 				b = 0
-				a = self.left[0].getNum()
+				a = self.left[0].get_num()
 			print("\033[90ma = " + str(a) + "\033[39m")
 			print("\033[90mb = " + str(b) + "\033[39m")
 			print("The solution is:")
-			print("\033[90m-b / a = \033[32m" + str(-b / a) + "\033[39m")
+			print("\033[90m-b / a = \033[35m" + str(-b / a) + "\033[39m")
 		elif degree == 2:
 			if len(self.left) > 2:
-				c = self.left[0].getNum()
-				b = self.left[1].getNum()
-				a = self.left[2].getNum()
+				c = self.left[0].get_num()
+				b = self.left[1].get_num()
+				a = self.left[2].get_num()
 			elif len(self.left) > 1:
 				c = 0
-				b = self.left[0].getNum()
-				a = self.left[1].getNum()
+				b = self.left[0].get_num()
+				a = self.left[1].get_num()
 			else:
 				c = 0
 				b = 0
-				a = self.left[0].getNum()
+				a = self.left[0].get_num()
 			print("\033[90ma = " + str(a) + "\033[39m")
 			print("\033[90mb = " + str(b) + "\033[39m")
 			print("\033[90mc = " + str(c) + "\033[39m")
 			d = b ** 2 - (4 * a * c)
-			print("\033[90md = " + str(d) + "\033[39m")
+			print("\033[90mdiscriminant = " + str(d) + "\033[39m")
 			if d > 0:
-				print("Discriminant is strictly positive, the two solutions are:")
-				print("\033[90m(-b - (d ** 0.5)) / (2 * a) = \033[32m" + str((-b - (d ** 0.5)) / (2 * a)) + "\033[39m")
-				print("\033[90m(-b + (d ** 0.5)) / (2 * a) = \033[32m" + str((-b + (d ** 0.5)) / (2 * a)) + "\033[39m")
+				print("Discriminant is positive, the two solutions are:")
+				print("\033[90mx1 = (-b - (d ** 0.5)) / (2 * a) = \033[36m" + str((-b - (d ** 0.5)) / (2 * a)) + "\033[39m")
+				print("\033[90mx2 = (-b + (d ** 0.5)) / (2 * a) = \033[36m" + str((-b + (d ** 0.5)) / (2 * a)) + "\033[39m")
 			else:
 				if d == 0:
 					print("Discriminant is 0, the solution is:")
-					print("\033[90m-b / (2 * a) = \033[32m" + str(-b / (2 * a)))
+					print("\033[90m-b / (2 * a) = \033[36m" + str(-b / (2 * a)))
 				else:
 					print("Discriminant is strictly negative, the two solutions are:")
-					print("\033[90m(-b - (d ** 0.5)) / (2 * a) = \033[32m" + str((-b - (abs(d) ** 0.5)) / (2 * a)) + "i\033[39m")
-					print("\033[90m(-b + (d ** 0.5)) / (2 * a) = \033[32m" + str((-b + (abs(d) ** 0.5)) / (2 * a)) + "i\033[39m")
+					print("\033[90m(-b - (d ** 0.5)) / (2 * a) = \033[36m" + str((-b - (abs(d) ** 0.5)) / (2 * a)) + "i\033[39m")
+					print("\033[90m(-b + (d ** 0.5)) / (2 * a) = \033[36m" + str((-b + (abs(d) ** 0.5)) / (2 * a)) + "i\033[39m")
 		else:
 			print("\033[31mThe polynomial degree is stricly greater than 2, I can't solve.\033[39m")
 			return False
 		return True
 
-	def toString(self):
+	def to_string(self):
 		s = ""
 		for p in self.left:
-			s += p.toString()
+			s += p.to_string()
 			s += " "
 		s += "="
 		for p in self.right:
 			s += " "
-			s += p.toString()
+			s += p.to_string()
 		return s
 
-
 if len(argv) <= 1:
-	print("\033[31mNot enougth argument\033[39m")
+	print("\033[31mNot enough argument\033[39m")
 else:
 	c = Computer()
 	if not c.parse(argv[1]):
